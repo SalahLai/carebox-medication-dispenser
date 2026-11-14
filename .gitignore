@@ -1,0 +1,22 @@
+# PlatformIO & Embedded
+.pio/
+.vscode/
+*.bin
+*.elf
+*.hex
+
+# Flutter & Dart
+.dart_tool/
+.packages
+build/
+android/.gradle/
+android/app/build/
+android/.idea/
+*.apk
+*.aab
+
+# OS & Environment
+.DS_Store
+Thumbs.db
+*.log
+.env
