@@ -58,27 +58,27 @@ Unlike conventional IoT dispensers that rely on cloud infrastructure and continu
 ## System Architecture
 
 ```mermaid
-flowchart TD
+graph TD
     subgraph MobileApp [Flutter Mobile App]
-        A[Medication Setup & Schedules] -->|Bluetooth Classic SPP| B[Clock Sync & Target Phone]
+        A[Medication Setup and Schedules] -->|Bluetooth Classic SPP| B[Clock Sync and Target Phone]
     end
 
     subgraph ESP32Core [ESP32 Core Controller]
-        B -.->|UART / SPP| C[NVS Storage & Schedule Manager]
+        B -.->|UART or SPP| C[NVS Storage and Schedule Manager]
         D[DS3231 RTC] -->|I2C Time Polling| E{Alarm Engine}
         C -->|Active Regimen| E
         
         E -->|Due Time Reached| F[Alerting State]
-        F --> G[Buzzer & Compartment LED ON]
-        F --> H[OLED: Drug Name & Dose]
+        F --> G[Buzzer and Compartment LED ON]
+        F --> H[OLED Drug Name and Dose Display]
     end
 
-    subgraph PatientInteraction [Patient & Escalation]
+    subgraph Escalation [Patient and Escalation]
         G --> I{Intake Confirmed?}
         H --> I
         I -->|Button Pressed within 10 min| J[Log Confirmed in NVS]
         J --> K[Return to IDLE]
-        I -->|Timeout: 10 min elapsed| L[SIM800L GSM Module]
+        I -->|Timeout 10 min elapsed| L[SIM800L GSM Module]
         L -->|Direct Cellular SMS| M[Caregiver Phone Alert]
         L --> N[Log Missed in NVS]
         N --> K
@@ -177,4 +177,5 @@ flutter run
 ## License
 
 This project is open-source and licensed under the [MIT License](LICENSE).
+
 
