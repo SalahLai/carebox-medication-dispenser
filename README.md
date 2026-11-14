@@ -59,25 +59,26 @@ Unlike conventional IoT dispensers that rely on cloud infrastructure and continu
 
 ```mermaid
 flowchart TD
-    subgraph MobileApp ["Flutter Mobile App (Caregiver)"]
+    subgraph MobileApp [Flutter Mobile App]
         A[Medication Setup & Schedules] -->|Bluetooth Classic SPP| B[Clock Sync & Target Phone]
     end
 
-    subgraph ESP32Core ["ESP32 Core Controller"]
+    subgraph ESP32Core [ESP32 Core Controller]
         B -.->|UART / SPP| C[NVS Storage & Schedule Manager]
         D[DS3231 RTC] -->|I2C Time Polling| E{Alarm Engine}
         C -->|Active Regimen| E
         
         E -->|Due Time Reached| F[Alerting State]
         F --> G[Buzzer & Compartment LED ON]
-        F --> H[OLED: Drug Name + Dose]
+        F --> H[OLED: Drug Name & Dose]
     end
 
-    subgraph PatientInteraction ["Patient / Escalation"]
-        G & H --> I{Intake Confirmed?}
-        I -- "Button Pressed (< 10 min)" --> J[Log Confirmed in NVS]
+    subgraph PatientInteraction [Patient & Escalation]
+        G --> I{Intake Confirmed?}
+        H --> I
+        I -->|Button Pressed within 10 min| J[Log Confirmed in NVS]
         J --> K[Return to IDLE]
-        I -- "Timeout (10 min elapsed)" --> L[SIM800L GSM Module]
+        I -->|Timeout: 10 min elapsed| L[SIM800L GSM Module]
         L -->|Direct Cellular SMS| M[Caregiver Phone Alert]
         L --> N[Log Missed in NVS]
         N --> K
@@ -176,3 +177,4 @@ flutter run
 ## License
 
 This project is open-source and licensed under the [MIT License](LICENSE).
+
